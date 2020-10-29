@@ -41,7 +41,7 @@ server <- function(input, output) {
 ### -------------- Call hits using the neural net -------------- ###
     # triggers when values$df_wide appears or changes
     observeEvent(values$df_wide, {
-      values$python_output <- analyze_data(values$df_wide)
+      values$python_output <- classify('dsf_net_dict.pt', values$df_wide)
     })
     
     
