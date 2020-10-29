@@ -1,5 +1,7 @@
-def analyze_data(rdf):
-	print(rdf.keys())
-	print(rdf['well'])
+import numpy as np
 
-	#print(rdf)
+def analyze_data(rdf):
+  data_array = [rdf[k] for k in rdf.keys() if k != 'well']
+  data_array = np.vstack(data_array)
+  print(data_array.T.shape)
+	  

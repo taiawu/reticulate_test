@@ -28,7 +28,7 @@ server <- function(input, output) {
     # triggers when values$df_all appears or changes
     observeEvent(values$df_all, {
       # write instructions for the plot
-        values$main_plot <- facet_wrap_linetyped2(values$df_all, title = "Plot test!", facets_wide = 6 )
+        #values$main_plot <- facet_wrap_linetyped2(values$df_all, title = "Plot test!", facets_wide = 6 )
         
       # reformat data for the NN model
       values$df_wide <- values$df_all %>%
@@ -44,8 +44,9 @@ server <- function(input, output) {
       values$python_output <- analyze_data(values$df_wide)
     })
     
+    
 ### -------------- Render GUI elements -------------- ###
-    output$plot <- renderPlot( values$main_plot ) 
+    output$plot <- renderPlot( print(facet_wrap_linetyped2(values$df_all, title = "Plot test!", facets_wide = 6 ))) 
     output$which_python <- renderText({  values$python_output })
     output$raw_table <- renderTable({ values$df_wide  %>% head() })
 }
