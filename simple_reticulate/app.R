@@ -4,7 +4,7 @@ library(icesTAF) # contains mkdir
 library(tidyverse)
 library(reticulate)
 library(shiny)
-PYTHON_DEPENDENCIES = c('numpy')
+PYTHON_DEPENDENCIES = c('numpy', 'torch', 'pandas')
 
 # set up python environment
 virtualenv_dir = Sys.getenv('VIRTUALENV_NAME')
@@ -42,20 +42,30 @@ server <- function(input, output) {
     # triggers when values$df_wide appears or changes
     observeEvent(values$df_wide, {
       values$python_output <- classify('dsf_net_dict.pt', values$df_wide)
+                              
+      
+      values$df_outcomes <- values$python_output %>% 
+                              set_names(c("reject", "sensitive", "hit", "well")) %>%
+                              pivot_longer(-well, names_to = "outcome", values_to = "log_prob") %>%
+                              left_join( ., values$df_all %>% select(well, dye) %>% distinct(), by = "well")
+      
+      print(values$python_output %>% str()) 
     })
     
+
     
 ### -------------- Render GUI elements -------------- ###
     output$plot <- renderPlot( print(facet_wrap_linetyped2(values$df_all, title = "Plot test!", facets_wide = 6 ))) 
     output$which_python <- renderText({  values$python_output })
-    output$raw_table <- renderTable({ values$df_wide  %>% head() })
+    output$raw_table <- renderTable({ values$df_wide })
+    output$prob_table <- renderTable({ values$df_outcomes })
 }
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(useShinyalert(),
-                          plotOutput("plot"), # display plot
-                          tableOutput('raw_table') # print df_wide, the data passed to the NN
-                          
+                         # plotOutput("plot"), # display plot
+                          tableOutput('raw_table'), # print df_wide, the data passed to the NN
+                tableOutput('prob_table')
 )
 
 shinyApp(ui, server) # run the app

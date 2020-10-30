@@ -3,7 +3,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import pickle
+import pandas as pd
 
+import os
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 def classify(model_path, rdf):
     model = DSFNet()
@@ -18,8 +21,10 @@ def classify(model_path, rdf):
 
     predicted = np.hstack(predicted)
     wells = np.hstack(wells)
-    print(predicted)
-    print(wells)
+    df = pd.DataFrame(predicted, index=wells, columns=['Prob 0', 'Prob 1', 'Prob 2'])
+    df['well'] = df.index
+    print(df)
+    return df
 
 def format_data(rdf):
     data_array = [np.array(rdf[k]) for k in rdf.keys() if k != 'well']
