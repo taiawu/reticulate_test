@@ -107,7 +107,5 @@ def load_data():
   with open('toy_data.pickle', 'rb') as handle:
    return pickle.load(handle)
 
-data = load_data()
-classify('dsf_net.pt', data)
 
 
