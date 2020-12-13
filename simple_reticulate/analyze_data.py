@@ -103,10 +103,11 @@ def write_data(rdf):
   with open('toy_data.pickle', 'wb') as handle:
     pickle.dump(rdf, handle, protocol=pickle.HIGHEST_PROTOCOL)
     
-def load_data(path):
+def load_data():
   with open('toy_data.pickle', 'rb') as handle:
    return pickle.load(handle)
 
-
+data = load_data()
+classify('dsf_net.pt', data)
 
 
