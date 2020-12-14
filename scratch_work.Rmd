@@ -1,0 +1,40 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Following along with  [Ranikay Reticulate Tutorial](https://github.com/ranikay/shiny-reticulate-app) 
+
+```{r}
+# install.packages("shiny")
+# install.packages("DT")
+# install.packages("RColorBrewer")
+# install.packages("reticulate")
+# install.packages("reticulate")
+library(usethis)
+```
+
+Adding python environment to .Rprofile
+```{r}
+usethis::edit_r_profile()
+```
+Altering R data format
+```{r}
+df_all <- readRDS("simple_reticulate/sample_data_small.rds") %>%
+              mutate(type_f = factor(type, levels = c("protein", "buffer"))) %>%
+              select(well, channel_f, type_f,  Temperature, value)  %>%
+              arrange(well, channel_f, type_f) %>%
+              pivot_wider( names_from = c(well, channel_f, type_f), values_from = value )
+
+
+df_all <- readRDS("simple_reticulate/sample_data_small.rds") %>%
+              mutate(type_f = factor(type, levels = c("protein", "buffer"))) %>%
+              select(well, channel_f, type_f,  Temperature, value)  %>%
+              arrange(type_f, channel_f, Temperature) %>%
+              pivot_wider( names_from = c(type_f, channel_f, Temperature), values_from = value )
+
+df_all %>% names()
+            
+```
+
+

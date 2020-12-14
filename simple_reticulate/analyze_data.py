@@ -9,8 +9,11 @@ import os
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 def classify(model_path, rdf):
+    print("start!")
     model = DSFNet()
+    print("passed  model = DSFNet()")
     model.load_state_dict(torch.load(model_path))
+    print("passed  model.load...")
     model.eval()
     loader = torch.utils.data.DataLoader(format_data(rdf), batch_size=512, shuffle=False)
     predicted = []
@@ -73,6 +76,7 @@ class ArrayDataset(torch.utils.data.Dataset):
 
 class DSFNet(nn.Module):
     """
+    Doc string what?
     """
 
     def __init__(self,
